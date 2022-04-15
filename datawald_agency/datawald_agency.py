@@ -33,7 +33,7 @@ class Agency(Abstract):
             tx_entity_tgt = self.tx_transaction_tgt
             tx_entity_tgt_ext = self.tx_transaction_tgt_ext
             insert_update_entities = self.insert_update_transactions
-        elif tx_type in ("product", "inventory", "inventorylot"):
+        elif tx_type in ("product", "inventory", "inventorylot", "pricelevel"):
             tx_entity_tgt = self.tx_asset_tgt
             tx_entity_tgt_ext = self.tx_asset_tgt_ext
             insert_update_entities = self.insert_update_assets
@@ -99,7 +99,12 @@ class Agency(Abstract):
             tx_entities_src = self.tx_transactions_src
             tx_entities_src_ext = self.tx_transactions_src_ext
             validate_data = self.validate_transaction_data
-        elif kwargs.get("tx_type") in ("product", "inventory", "inventorylot"):
+        elif kwargs.get("tx_type") in (
+            "product",
+            "inventory",
+            "inventorylot",
+            "pricelevel",
+        ):
             get_entities_total = self.get_assets_total
             tx_entities_src = self.tx_assets_src
             tx_entities_src_ext = self.tx_assets_src_ext

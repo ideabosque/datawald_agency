@@ -205,7 +205,7 @@ class Abstract(object):
                 self.logger.info(queue)
                 queue["count"] += 1
                 if queue["count"] > 1:
-                    sleep(2 ** queue["count"] * 0.5)
+                    sleep(0.25)    # sleep(2 ** queue["count"] * 0.5)
                 entity = self.datawald.get_tx_staging(**queue["entity"])
                 if entity["tx_status"] != "N":
                     entities.append(
@@ -224,7 +224,7 @@ class Abstract(object):
                             queue["entity"],
                             **{
                                 "tx_status": "?",
-                                "tx_note": f"Not able to retrieve the result for source/tx_type/src_id({queue['entity']['source']}/{queue['entity']['tx_type']}/{queue['entity']['src_id']}) in 8 times.",
+                                "tx_note": f"Not able to retrieve the result for source/tx_type_src_id({queue['entity']['source']}/{queue['entity']['tx_type_src_id']}) in 8 times.",
                             },
                         )
                     )
