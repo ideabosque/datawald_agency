@@ -4,7 +4,7 @@ from __future__ import print_function
 
 __author__ = "bibow"
 
-import traceback
+import traceback, random
 from datetime import datetime
 from decimal import Decimal
 from pytz import timezone
@@ -160,7 +160,7 @@ class Abstract(object):
         sync_task.update({"cut_date": cut_date})
 
         if kwargs.get("has_offset", False):
-            entities_total = get_entities_total(tx_type, source, cut_date)
+            entities_total = get_entities_total(**kwargs)
             self.logger.info(
                 f"TX Type:{tx_type} Total:{entities_total} Offset:{offset} Limit:{limit} Cut Date:{cut_date}"
             )
@@ -306,7 +306,7 @@ class Abstract(object):
                     )
                 else:
                     try:
-                        funct = lambda src: eval(v["funct"])
+                        funct = eval(f"lambda src: {v['funct']}")
                         src = {
                             i["label"]: self.extract_value(
                                 get_cust_value, **self._get_params(record, i)
@@ -378,7 +378,7 @@ class Abstract(object):
             }
         else:
             try:
-                funct = lambda src: eval(tx["funct"])
+                funct = eval(f"lambda src: {tx['funct']}")
                 src = {
                     i["label"]: self.extract_value(
                         get_cust_value, **self._get_params(value, i)

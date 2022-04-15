@@ -124,7 +124,7 @@ class Agency(Abstract):
         )
         return super().retrieve_entities_from_source(**kwargs)
 
-    def get_transactions_total(self, tx_type, source, cut_date):
+    def get_transactions_total(self, **kwargs):
         return 0
 
     def tx_transactions_src(self, **kwargs):
@@ -136,7 +136,7 @@ class Agency(Abstract):
     def validate_transaction_data(self, transaction, **kwargs):
         pass
 
-    def get_assets_total(self, tx_type, source, cut_date):
+    def get_assets_total(self, **kwargs):
         return 0
 
     def tx_assets_src(self, **kwargs):
@@ -146,11 +146,14 @@ class Agency(Abstract):
         pass
 
     def get_product_metadatas(self, **kwargs):
-        headers = self.datawald.get_metadata(kwargs.get("target"))
+        headers = self.datawald.get_product_metadatas(
+            **{"target_source": f"{kwargs.get('target')}-{kwargs.get('source')}"}
+        )
         metadatas = {
             metadata["dest"]: {
                 "src": metadata["src"],
                 "funct": metadata["funct"],
+                "type": "attribute",
             }
             for metadata in [header["metadata"] for header in headers]
         }
@@ -163,7 +166,9 @@ class Agency(Abstract):
         pass
 
     def validate_product_data(self, asset, **kwargs):
-        headers = self.datawald.get_metadata(kwargs.get("target"))
+        headers = self.datawald.get_product_metadatas(
+            **{"target_source": f"{kwargs.get('target')}-{kwargs.get('source')}"}
+        )
         schema = {
             list(header["metadata"]["schema"].keys())[0]: list(
                 header["metadata"]["schema"].values()
@@ -176,7 +181,7 @@ class Agency(Abstract):
         if not product_validate.validate(asset["data"], schema):
             raise Exception(product_validate.errors)
 
-    def get_persons_total(self, tx_type, source, cut_date):
+    def get_persons_total(self, **kwargs):
         return 0
 
     def tx_persons_src(self, **kwargs):
