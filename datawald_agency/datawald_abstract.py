@@ -250,11 +250,11 @@ class Abstract(object):
             )
         )
 
-        if sync_task["sync_status"] == "Completed":
-            self.logger.info(log)
-        else:
+        if sync_task["sync_status"] == "Incompleted":            
             self.logger.error(log)
             raise Exception(log)
+
+        self.logger.info(log)
         return sync_task
 
     def retry_sync_task(self, **kwargs):
