@@ -100,6 +100,8 @@ class Abstract(object):
             "entities": [],
             "funct": funct,
         }
+        if kwargs.get("id"):
+            sync_task.update({"id": kwargs.get("id")})
 
         if kwargs.get("has_offset", False):
             (offset, cut_date) = self.datawald.get_last_cute_date(
@@ -205,7 +207,7 @@ class Abstract(object):
                 self.logger.info(queue)
                 queue["count"] += 1
                 if queue["count"] > 1:
-                    sleep(0.25)    # sleep(2 ** queue["count"] * 0.5)
+                    sleep(0.25)  # sleep(2 ** queue["count"] * 0.5)
                 entity = self.datawald.get_tx_staging(**queue["entity"])
                 if entity["tx_status"] != "N":
                     entities.append(
@@ -250,7 +252,7 @@ class Abstract(object):
             )
         )
 
-        if sync_task["sync_status"] == "Incompleted":            
+        if sync_task["sync_status"] == "Incompleted":
             self.logger.error(log)
             raise Exception(log)
 
