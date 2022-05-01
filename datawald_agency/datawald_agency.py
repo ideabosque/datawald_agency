@@ -135,7 +135,7 @@ class Agency(Abstract):
     def tx_transactions_src(self, **kwargs):
         return ([], [])
 
-    def tx_transactions_src_ext(self, transactions):
+    def tx_transactions_src_ext(self, transactions, **kwargs):
         pass
 
     def validate_transaction_data(self, transaction, **kwargs):
@@ -147,7 +147,7 @@ class Agency(Abstract):
     def tx_assets_src(self, **kwargs):
         return []
 
-    def tx_assets_src_ext(self, assets):
+    def tx_assets_src_ext(self, assets, **kwargs):
         pass
 
     def get_product_metadatas(self, **kwargs):
@@ -192,7 +192,7 @@ class Agency(Abstract):
     def tx_persons_src(self, **kwargs):
         return []
 
-    def tx_persons_src_ext(self, persons):
+    def tx_persons_src_ext(self, persons, **kwargs):
         pass
 
     def validate_person_data(self, person, **kwargs):

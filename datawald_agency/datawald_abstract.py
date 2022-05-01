@@ -183,7 +183,7 @@ class Abstract(object):
         self, tx_entities_src, tx_entities_src_ext, validate_data, **kwargs
     ):
         entities = tx_entities_src(**kwargs)
-        tx_entities_src_ext(entities)
+        tx_entities_src_ext(entities, **kwargs)
         for entity in entities:
             try:
                 validate_data(entity, **kwargs)
