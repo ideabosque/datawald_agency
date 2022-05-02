@@ -257,7 +257,7 @@ class Abstract(object):
             raise Exception(log)
 
         self.logger.info(log)
-        return sync_task
+        return Utility.json_dumps(sync_task)
 
     def retry_sync_task(self, **kwargs):
         sync_task = self.datawald.get_sync_task(**kwargs)
@@ -280,7 +280,7 @@ class Abstract(object):
             )
             id = self.datawald.insert_sync_task(**sync_task)
             sync_task.update({"id": id})
-        return sync_task
+        return Utility.json_dumps(sync_task)
 
     def transform_data(self, record, metadatas, get_cust_value=None):
         tgt = {}
