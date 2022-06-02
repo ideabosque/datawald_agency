@@ -86,6 +86,7 @@ class Agency(Abstract):
     def retrieve_entities_from_source(self, **kwargs):
         if kwargs.get("tx_type") in (
             "order",
+            "invoice",
             "purchaseorder",
             "itemreceipt",
             "itemfulfillment",
