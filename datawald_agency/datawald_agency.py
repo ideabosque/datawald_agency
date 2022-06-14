@@ -21,6 +21,7 @@ class Agency(Abstract):
         tx_type = kwargs["entities"][0].get("tx_type_src_id").split("-")[0]
         if tx_type in (
             "order",
+            "invoice",
             "purchaseorder",
             "itemreceipt",
             "itemfulfillment",
