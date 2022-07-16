@@ -38,7 +38,7 @@ class Agency(Abstract):
             tx_entity_tgt = self.tx_asset_tgt
             tx_entity_tgt_ext = self.tx_asset_tgt_ext
             insert_update_entities = self.insert_update_assets
-        elif tx_type in ("customer", "vendor"):
+        elif tx_type in ("customer", "vendor", "company", "contact"):
             tx_entity_tgt = self.tx_person_tgt
             tx_entity_tgt_ext = self.tx_person_tgt_ext
             insert_update_entities = self.insert_update_persons
@@ -111,7 +111,7 @@ class Agency(Abstract):
             tx_entities_src = self.tx_assets_src
             tx_entities_src_ext = self.tx_assets_src_ext
             validate_data = self.validate_asset_data
-        elif kwargs.get("tx_type") in ("customer", "vendor"):
+        elif kwargs.get("tx_type") in ("customer", "vendor", "company", "contact"):
             get_entities_total = self.get_persons_total
             tx_entities_src = self.tx_persons_src
             tx_entities_src_ext = self.tx_persons_src_ext
@@ -200,14 +200,23 @@ class Agency(Abstract):
     def validate_person_data(self, person, **kwargs):
         if kwargs.get("tx_type") == "customer":
             self.validate_customer_data(person, **kwargs)
-
-        if kwargs.get("tx_type") == "vendor":
+        elif kwargs.get("tx_type") == "vendor":
             self.validate_vendor_data(person, **kwargs)
-
-        pass
+        elif kwargs.get("tx_type") == "company":
+            self.validate_company_data(person, **kwargs)
+        elif kwargs.get("tx_type") == "contact":
+            self.validate_contact_data(person, **kwargs)
+        else:
+            pass
 
     def validate_customer_data(self, person, **kwargs):
         pass
 
     def validate_vendor_data(self, person, **kwargs):
+        pass
+
+    def validate_company_data(self, person, **kwargs):
+        pass
+
+    def validate_contact_data(self, person, **kwargs):
         pass
