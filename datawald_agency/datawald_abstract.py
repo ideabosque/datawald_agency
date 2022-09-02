@@ -34,6 +34,7 @@ class Abstract(object):
             {
                 "source": entity["source"],
                 "tx_type_src_id": entity["tx_type_src_id"],
+                "target": entity["target"],
                 "tgt_id": entity["tgt_id"],
                 "tx_status": entity["tx_status"],
                 "tx_note": entity["tx_note"],
@@ -73,6 +74,7 @@ class Abstract(object):
                 **{
                     "source": new_entity["source"],
                     "tx_type_src_id": new_entity["tx_type_src_id"],
+                    "target": new_entity["target"],
                     "tgt_id": new_entity["tgt_id"],
                     "tx_status": new_entity["tx_status"],
                     "tx_note": new_entity["tx_note"],
@@ -105,7 +107,7 @@ class Abstract(object):
 
         if kwargs.get("has_offset", False):
             (offset, cut_date) = self.datawald.get_last_cute_date(
-                tx_type, source, offset=True
+                tx_type, source, target, offset=True
             )  # Need update function.
             kwargs.update({"offset": offset, "cut_date": cut_date})
 
@@ -116,7 +118,7 @@ class Abstract(object):
                     },
                 )
         else:
-            cut_date = self.datawald.get_last_cute_date(tx_type, source)
+            cut_date = self.datawald.get_last_cute_date(tx_type, source, target)
             kwargs.update({"cut_date": cut_date})
 
         entities = self.get_entities(
@@ -140,6 +142,7 @@ class Abstract(object):
                     {
                         "source": source,
                         "tx_type_src_id": f"{tx_type}-{entity['src_id']}",
+                        "target": target,
                         "created_at": entity["created_at"],
                         "updated_at": entity["updated_at"],
                     }
