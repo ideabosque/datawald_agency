@@ -324,6 +324,7 @@ class Abstract(object):
                         self.logger.error(f"{src}/{v['funct']}")
                         self.logger.exception(log)
                         tgt[k] = log
+                        raise
             except Exception:
                 log = traceback.format_exc()
                 self.logger.error(f"{k}: {v}")
