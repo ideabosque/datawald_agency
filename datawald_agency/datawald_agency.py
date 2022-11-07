@@ -15,30 +15,46 @@ class Agency(Abstract):
     def __init__(self, logger, datawald=None):
         self.logger = logger
         self.datawald = datawald
+        self._tx_type = {
+            "transaction": [
+                "order",
+                "invoice",
+                "purchaseorder",
+                "itemreceipt",
+                "itemfulfillment",
+                "opportunity",
+                "quote",
+                "rma",
+                "billcredit",
+                "payment",
+                "inventoryadjustment",
+                "creditmemo",
+                "inventorytransfer",
+            ],
+            "asset": ["product", "inventory", "inventorylot", "pricelevel"],
+            "person": ["customer", "vendor", "company", "contact"],
+        }
+
+    @property
+    def tx_type(self):
+        return self._tx_type
+
+    @tx_type.setter
+    def tx_type(self, tx_type):
+        self._tx_type = tx_type
 
     ## Insert update entities to target.
     def insert_update_entities_to_target(self, **kwargs):
         tx_type = kwargs["entities"][0].get("tx_type_src_id").split("-")[0]
-        if tx_type in (
-            "order",
-            "invoice",
-            "purchaseorder",
-            "itemreceipt",
-            "itemfulfillment",
-            "opportunity",
-            "quote",
-            "rma",
-            "billcredit",
-            "payment",
-        ):
+        if tx_type in self.tx_type["transaction"]:
             tx_entity_tgt = self.tx_transaction_tgt
             tx_entity_tgt_ext = self.tx_transaction_tgt_ext
             insert_update_entities = self.insert_update_transactions
-        elif tx_type in ("product", "inventory", "inventorylot", "pricelevel"):
+        elif tx_type in self.tx_type["asset"]:
             tx_entity_tgt = self.tx_asset_tgt
             tx_entity_tgt_ext = self.tx_asset_tgt_ext
             insert_update_entities = self.insert_update_assets
-        elif tx_type in ("customer", "vendor", "company", "contact"):
+        elif tx_type in self.tx_type["person"]:
             tx_entity_tgt = self.tx_person_tgt
             tx_entity_tgt_ext = self.tx_person_tgt_ext
             insert_update_entities = self.insert_update_persons
@@ -85,33 +101,17 @@ class Agency(Abstract):
 
     ## Retrieve entities from source.
     def retrieve_entities_from_source(self, **kwargs):
-        if kwargs.get("tx_type") in (
-            "order",
-            "invoice",
-            "purchaseorder",
-            "itemreceipt",
-            "itemfulfillment",
-            "opportunity",
-            "quote",
-            "rma",
-            "billcredit",
-            "payment",
-        ):
+        if kwargs.get("tx_type") in self.tx_type["transaction"]:
             get_entities_total = self.get_transactions_total
             tx_entities_src = self.tx_transactions_src
             tx_entities_src_ext = self.tx_transactions_src_ext
             validate_data = self.validate_transaction_data
-        elif kwargs.get("tx_type") in (
-            "product",
-            "inventory",
-            "inventorylot",
-            "pricelevel",
-        ):
+        elif kwargs.get("tx_type") in self.tx_type["asset"]:
             get_entities_total = self.get_assets_total
             tx_entities_src = self.tx_assets_src
             tx_entities_src_ext = self.tx_assets_src_ext
             validate_data = self.validate_asset_data
-        elif kwargs.get("tx_type") in ("customer", "vendor", "company", "contact"):
+        elif kwargs.get("tx_type") in self.tx_type["person"]:
             get_entities_total = self.get_persons_total
             tx_entities_src = self.tx_persons_src
             tx_entities_src_ext = self.tx_persons_src_ext
