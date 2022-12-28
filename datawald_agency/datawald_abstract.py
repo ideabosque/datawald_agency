@@ -425,8 +425,8 @@ class Abstract(object):
         else:
             value = self.exists(record, key.split("|"))
 
-        if isinstance(value, str):
-            value = value.encode("ascii", "ignore")
+        # if isinstance(value, str):
+        #     value = value.encode("ascii", "ignore")
         if isinstance(value, (bytes, bytearray)):
             value = value.decode("utf-8", "ignore")
 
