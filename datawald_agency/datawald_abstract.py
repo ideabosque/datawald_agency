@@ -106,7 +106,7 @@ class Abstract(object):
             sync_task.update({"id": kwargs.get("id")})
 
         if kwargs.get("has_offset", False):
-            (offset, cut_date) = self.datawald.get_last_cute_date(
+            (offset, cut_date) = self.datawald.get_last_cut_date(
                 tx_type, source, target, offset=True
             )  # Need update function.
             kwargs.update({"offset": offset, "cut_date": cut_date})
@@ -118,7 +118,7 @@ class Abstract(object):
                     },
                 )
         else:
-            cut_date = self.datawald.get_last_cute_date(tx_type, source, target)
+            cut_date = self.datawald.get_last_cut_date(tx_type, source, target)
             kwargs.update({"cut_date": cut_date})
 
         entities = self.get_entities(
