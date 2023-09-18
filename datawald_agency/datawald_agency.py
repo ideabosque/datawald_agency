@@ -135,7 +135,7 @@ class Agency(Abstract):
         return 0
 
     def tx_transactions_src(self, **kwargs):
-        return ([], [])
+        return []
 
     def tx_transactions_src_ext(self, transactions, **kwargs):
         pass
