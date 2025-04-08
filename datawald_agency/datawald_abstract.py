@@ -4,11 +4,15 @@ from __future__ import print_function
 
 __author__ = "bibow"
 
-import traceback, random, re
+import random
+import re
+import traceback
 from datetime import datetime
 from decimal import Decimal
-from pytz import timezone
 from time import sleep
+
+from pytz import timezone
+
 from silvaengine_utility import Utility
 
 
@@ -209,8 +213,8 @@ class Abstract(object):
                 queue = queues.pop()
                 self.logger.info(queue)
                 queue["count"] += 1
-                if queue["count"] > 1:
-                    sleep(0.25)  # sleep(2 ** queue["count"] * 0.5)
+                # if queue["count"] > 1:
+                #     sleep(0.25)  # sleep(2 ** queue["count"] * 0.5)
                 entity = self.datawald.get_tx_staging(**queue["entity"])
                 if entity["tx_status"] != "N":
                     entities.append(
@@ -223,13 +227,13 @@ class Abstract(object):
                             },
                         )
                     )
-                elif queue["count"] > 8:
+                elif queue["count"] > 20:
                     entities.append(
                         dict(
                             queue["entity"],
                             **{
                                 "tx_status": "?",
-                                "tx_note": f"Not able to retrieve the result for source/tx_type_src_id({queue['entity']['source']}/{queue['entity']['tx_type_src_id']}) in 8 times.",
+                                "tx_note": f"Not able to retrieve the result for source/tx_type_src_id({queue['entity']['source']}/{queue['entity']['tx_type_src_id']}) in 20 times.",
                             },
                         )
                     )
@@ -239,6 +243,7 @@ class Abstract(object):
                 if len(queues) == 0:
                     break
 
+                sleep(1)
             self.datawald.update_sync_task(**dict(kwargs, **{"entities": entities}))
         except Exception:
             log = traceback.format_exc()
